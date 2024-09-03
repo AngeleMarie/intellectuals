@@ -23,7 +23,7 @@ export default function IntellectualList() {
 
         console.log("Making fetch request to /intellectuals with token");
 
-        const response = await fetch("https://intellectuals.vercel.app/api/intellectuals", {
+        const response = await fetch("https://intellectuals.vercel.app/intellectuals", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

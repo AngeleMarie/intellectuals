@@ -27,7 +27,7 @@ export default function Professional() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://intellectuals.vercel.app/api/register", {
+      const response = await fetch("https://intellectuals.vercel.app/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
