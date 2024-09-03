@@ -14,7 +14,7 @@ export default function LoginPage() {
     setLoading(true); // Start loading
     setError(''); // Clear previous errors
     try {
-      const response = await fetch('https://intellectuals.vercel.app/admin/login', {
+      const response = await fetch('https://intellectuals.vercel.app/admin/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
