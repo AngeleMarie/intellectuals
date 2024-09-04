@@ -2,6 +2,7 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Link from "next/link"
 
 export default function Professional() {
   const router = useRouter();
@@ -123,7 +124,7 @@ export default function Professional() {
             </label>
             <textarea
               placeholder="Enter extra information"
-              className="w-full bg-transparent border-[1px] border-main rounded-md p-2"
+              className="w-full bg-transparent border-[1px] border-gray-300 p-3 rounded-md p-2"
               name="MoreInformation"
               value={formData.MoreInformation}
               onChange={handleChange}
@@ -143,14 +144,20 @@ export default function Professional() {
             </span>
           </div>
           {errors.checkbox && <p className="text-red-500 text-sm mt-1">{errors.checkbox}</p>}
-          <div className="flex justify-center py-4">
+          
+          <div className="flex justify-between py-4">
+            <Link href="/education" className="text-submain underline">
+              ← Return
+            </Link>
             <button
               type="submit"
-              className="border border-main bg-main text-white px-10 py-2 rounded-md"
+              className="bg-main text-white px-10 py-2 rounded-md"
+            
             >
               Submit
             </button>
           </div>
+          
         </form>
       </div>
     </main>

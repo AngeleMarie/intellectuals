@@ -43,7 +43,7 @@ export default function LoginPage() {
     
     try {
       const response = await fetch('https://intellectuals.vercel.app/admin/login', {
-        method: 'POST',
+         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });

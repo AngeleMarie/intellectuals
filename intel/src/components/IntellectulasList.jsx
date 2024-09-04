@@ -58,6 +58,18 @@ export default function IntellectualList() {
     fetchIntellectuals();
   }, [router]);
 
+  const calculateAge = (birthdate) => {
+    if (!birthdate) return 'N/A';
+    const today = new Date();
+    const birthDate = new Date(birthdate);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   if (loading) {
     return <p>Loading intellectuals...</p>;
   }
@@ -75,11 +87,11 @@ export default function IntellectualList() {
               key={intellectual._id}
               className="bg-white shadow-md p-6 rounded-lg"
             >
-                <p className="text-main text-2xl py-2 font-bold">
+              <p className="text-main text-2xl py-2 font-bold">
                 <strong>General Information</strong> 
               </p>
-             <p>
-                <strong>Names:</strong> {intellectual.FirstName}{" "}{intellectual.LastName}
+              <p>
+                <strong>Names:</strong> {intellectual.FirstName} {intellectual.LastName}
               </p>
               <p>
                 <strong>Email:</strong> {intellectual.Email}
@@ -91,14 +103,16 @@ export default function IntellectualList() {
                 <strong>Gender:</strong> {intellectual.Gender}
               </p>
               <p>
-                <strong>Personal Website</strong> 
-                {intellectual.PersonalWebsite}
+                <strong>Personal Website:</strong> {intellectual.PersonalWebsite || 'N/A'}
               </p>
               <p>
                 <strong>Country:</strong> {intellectual.Country}
               </p>
               <p>
                 <strong>Residence:</strong> {intellectual.Residence}
+              </p>
+              <p>
+                <strong>Age:</strong> {calculateAge(intellectual.DOB)}
               </p>
               <p className="text-main text-2xl py-2 font-bold">
                 <strong>Educational Background</strong> 
@@ -131,7 +145,7 @@ export default function IntellectualList() {
                 <strong>Location:</strong> {intellectual.Location || 'N/A'}
               </p>
               <p>
-                <strong>Role:</strong> {intellectual.role}
+                <strong>Role:</strong> {intellectual.Role || 'N/A'}
               </p>
               <p>
                 <strong>Short Description:</strong> {intellectual.MoreInformation || 'N/A'}

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from "next/link";
 import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css'; // Import the CSS for the phone input component
+import 'react-phone-input-2/lib/style.css'; 
 
 export default function Home() {
   const router = useRouter();
