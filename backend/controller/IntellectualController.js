@@ -149,10 +149,20 @@ const getAllIntellectuals = async (req, res) => {
     });
   }
 };
+const logout = (req, res) => {
+  try {
+   
+    res.status(200).json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Error during logout:', error.message);
+    res.status(500).json({ error: 'Failed to log out', message: error.message });
+  }
+};
 
 module.exports = {
   register,
   getAllIntellectuals,
   loginAdmin,
-  registerAdmin
+  registerAdmin,
+  logout
 };
