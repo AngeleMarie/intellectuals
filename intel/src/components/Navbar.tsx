@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Import usePathname from next/navigation
+import { usePathname } from "next/navigation"; 
 import { GoDotFill } from "react-icons/go";
 
 interface NavLinkProps {

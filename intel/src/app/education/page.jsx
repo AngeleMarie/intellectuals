@@ -14,6 +14,8 @@ export default function Education() {
     Degree: "Bachelors",
   });
 
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     const personalData = JSON.parse(localStorage.getItem("personalData"));
     if (personalData) {
@@ -25,9 +27,31 @@ export default function Education() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    const newErrors = {};
+
+    if (formData.SchoolName.trim() === "") {
+      newErrors.SchoolName = "School Name is required.";
+    }
+    if (formData.GraduationYear.trim() === "" || new Date(formData.GraduationYear).getFullYear() > new Date().getFullYear()) {
+      newErrors.GraduationYear = "Valid Graduation Year is required.";
+    }
+    if (formData.Combination.trim() === "") {
+      newErrors.Combination = "Combination is required.";
+    }
+    if (formData.FieldOfStudy.trim() === "") {
+      newErrors.FieldOfStudy = "Field of Study is required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleContinue = () => {
-    localStorage.setItem("educationData", JSON.stringify(formData));
-    router.push("/professional");
+    if (validate()) {
+      localStorage.setItem("educationData", JSON.stringify(formData));
+      router.push("/professional");
+    }
   };
 
   return (
@@ -42,9 +66,7 @@ export default function Education() {
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium mb-1">
-                School Name
-              </label>
+              <label className="block text-sm font-medium mb-1">School Name</label>
               <input
                 type="text"
                 name="SchoolName"
@@ -52,11 +74,10 @@ export default function Education() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
+              {errors.SchoolName && <p className="text-red-500">{errors.SchoolName}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">
-                Graduation Year
-              </label>
+              <label className="block text-sm font-medium mb-1">Graduation Year</label>
               <input
                 type="date"
                 name="GraduationYear"
@@ -64,13 +85,12 @@ export default function Education() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
+              {errors.GraduationYear && <p className="text-red-500">{errors.GraduationYear}</p>}
             </div>
           </div>
-          <div className=" mb-4 items-center">
+          <div className="mb-4 items-center">
             <div>
-              <label className="block text-sm font-medium mb-1">
-                Combination
-              </label>
+              <label className="block text-sm font-medium mb-1">Combination</label>
               <input
                 type="text"
                 name="Combination"
@@ -78,6 +98,7 @@ export default function Education() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
+              {errors.Combination && <p className="text-red-500">{errors.Combination}</p>}
             </div>
           </div>
           <div className="text-xl font-semibold mb-6 text-left">
@@ -86,9 +107,7 @@ export default function Education() {
 
           <div className="grid gap-6 md:grid-cols-2 mb-4">
             <div>
-              <label className="block text-sm font-medium mb-1">
-                Field of Study
-              </label>
+              <label className="block text-sm font-medium mb-1">Field of Study</label>
               <input
                 type="text"
                 name="FieldOfStudy"
@@ -96,11 +115,10 @@ export default function Education() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
+              {errors.FieldOfStudy && <p className="text-red-500">{errors.FieldOfStudy}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">
-                Degree Obtained
-              </label>
+              <label className="block text-sm font-medium mb-1">Degree Obtained</label>
               <select
                 name="Degree"
                 value={formData.Degree}
