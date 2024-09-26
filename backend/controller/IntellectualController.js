@@ -169,6 +169,5 @@ module.exports = {
   register,
   loginAdmin,
   registerAdmin,
-  logout,
   filterIntellectuals
 };
