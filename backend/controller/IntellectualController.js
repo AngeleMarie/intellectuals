@@ -128,41 +128,47 @@ const registerAdmin = async (req, res) => {
   }
 };
 
-const getAllIntellectuals = async (req, res) => {
+const filterIntellectuals = async (req, res) => {
   try {
-    
-    const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
+    const { Gender, Degree, FieldOfStudy, Country } = req.query;
 
-    if (decoded.role !== 'admin') {
-      return res.status(403).json({ error: 'Access denied' });
+    let query = {};
+
+
+    if (Country) {
+      query.Country = Country;
+    }
+    if (Degree) {
+      query.Degree = Degree;
     }
 
+    if (FieldOfStudy) {
+      query.FieldOfStudy = FieldOfStudy;
+    }
+
+    
+    if (Gender) {
+      query.Gender=Gender
+
   
-    const intellectuals = await Intel.find({});
+    }
+    
+    const intellectuals = await Intel.find(query);
     return res.status(200).json(intellectuals);
   } catch (error) {
-    console.error('Error retrieving intellectuals:', error.message);
+    console.error('Error filtering intellectuals:', error.message);
     return res.status(500).json({
-      error: 'Failed to retrieve intellectuals',
+      error: 'Failed to filter intellectuals',
       message: error.message,
     });
-  }
-};
-const logout = (req, res) => {
-  try {
-   
-    res.status(200).json({ message: 'Logged out successfully' });
-  } catch (error) {
-    console.error('Error during logout:', error.message);
-    res.status(500).json({ error: 'Failed to log out', message: error.message });
   }
 };
 
 module.exports = {
   register,
-  getAllIntellectuals,
   loginAdmin,
   registerAdmin,
-  logout
+  logout,
+  filterIntellectuals
 };

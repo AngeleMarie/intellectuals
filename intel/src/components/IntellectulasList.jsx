@@ -2,66 +2,84 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { FaFilter } from "react-icons/fa"; // Assuming you're using react-icons for the filter icon
 
 export default function IntellectualList() {
   const [intellectuals, setIntellectuals] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    gender: "",
+    country: "",
+    fieldOfStudy: ""
+  });
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchIntellectuals = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        console.log("Token retrieved:", token);
+  // Function to fetch intellectuals based on filters
+  const fetchIntellectuals = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        if (!token) {
-          setError("No token found. Please log in.");
-          router.push("/login");
-          return;
-        }
+      if (!token) {
+        setError("No token found. Please log in.");
+        router.push("/login");
+        return;
+      }
 
-        console.log("Making fetch request to /intellectuals with token");
+      // Build query parameters from filters
+      const queryParams = new URLSearchParams({
+        Gender: filters.gender,
+        Country: filters.country,
+        FieldOfStudy: filters.fieldOfStudy
+      }).toString();
 
-      
-        const response = await fetch("https://intellectuals.vercel.app/intellectuals", {
-
+      const response = await fetch(
+        `https://intellectuals.vercel.app/intellectuals/filter?${queryParams}`,
+        {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Data fetched successfully:", data);
-          setIntellectuals(data);
-        } else {
-          console.error("Fetch failed with status:", response.status);
-          if (response.status === 401) {
-            setError("Unauthorized. Please log in.");
-            router.push("/login");
-          } else if (response.status === 403) {
-            setError("Access denied. Admins only.");
-          } else {
-            const errorText = await response.text();
-            setError(`Failed to fetch intellectuals: ${errorText}`);
+            "Content-Type": "application/json"
           }
         }
-      } catch (error) {
-        console.error("Error during fetch:", error);
-        setError("An error occurred. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
-    fetchIntellectuals();
-  }, [router]);
+      if (response.ok) {
+        const data = await response.json();
+        setIntellectuals(data);
+      } else {
+        if (response.status === 401) {
+          setError("Unauthorized. Please log in.");
+          router.push("/login");
+        } else {
+          const errorText = await response.text();
+          setError(`Failed to fetch intellectuals: ${errorText}`);
+        }
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle filter change
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value
+    }));
+  };
+
+  // Handle filter button click
+  const handleFilterClick = () => {
+    setLoading(true); // Show loading state while fetching
+    fetchIntellectuals(); // Call the fetch function
+  };
 
   const calculateAge = (birthdate) => {
-    if (!birthdate) return 'N/A';
+    if (!birthdate) return "N/A";
     const today = new Date();
     const birthDate = new Date(birthdate);
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -71,6 +89,11 @@ export default function IntellectualList() {
     }
     return age;
   };
+
+  useEffect(() => {
+    
+    fetchIntellectuals();
+  }, []); 
 
   if (loading) {
     return <p>Loading intellectuals...</p>;
@@ -82,15 +105,86 @@ export default function IntellectualList() {
 
   return (
     <div className="container mx-auto p-6">
+      <div className="mb-6">
+    
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <div>
+            <label htmlFor="gender" className="block font-medium">
+              Gender:
+            </label>
+            <select
+              id="gender"
+              name="gender"
+              value={filters.gender}
+              onChange={handleFilterChange}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">All</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+            </select>
+          </div>
+
+          
+          <div>
+            <label htmlFor="country" className="block font-medium">
+              Country:
+            </label>
+            <select
+              id="country"
+              name="country"
+              value={filters.country}
+              onChange={handleFilterChange}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">All</option>
+              <option value="USA">USA</option>
+              <option value="Rwanda">Rwanda</option>
+              <option value="UK">UAE</option>
+          
+            </select>
+          </div>
+
+      
+          <div>
+            <label htmlFor="fieldOfStudy" className="block font-medium">
+              Field of Study:
+            </label>
+            <select
+              id="fieldOfStudy"
+              name="fieldOfStudy"
+              value={filters.fieldOfStudy}
+              onChange={handleFilterChange}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">All</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Business analysis">Business analysis</option>
+              <option value="Engineering">Engineering</option>
+            
+            </select>
+          </div>
+
+      
+          <div className="flex items-center">
+            <button
+              onClick={handleFilterClick}
+              className="flex items-center bg-main text-white p-2 rounded hover:bg-green-500"
+            >
+              <FaFilter className="mr-2" />
+              Filter
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {intellectuals.length > 0 ? (
           intellectuals.map((intellectual) => (
-            <div
-              key={intellectual._id}
-              className="bg-white shadow-md p-6 rounded-lg"
-            >
+            <div key={intellectual._id} className="bg-white shadow-md p-6 rounded-lg">
               <p className="text-main text-2xl py-2 font-bold">
-                <strong>General Information</strong> 
+                <strong>General Information</strong>
               </p>
               <p>
                 <strong>Names:</strong> {intellectual.FirstName} {intellectual.LastName}
@@ -105,13 +199,10 @@ export default function IntellectualList() {
                 <strong>Gender:</strong> {intellectual.Gender}
               </p>
               <p>
-                <strong>Personal Website:</strong> {intellectual.PersonalWebsite || 'N/A'}
-              </p>
-              <p>
                 <strong>Country:</strong> {intellectual.Country}
               </p>
               <p>
-                <strong>Residence:</strong> {intellectual.Residence}
+                <strong>Field of Study:</strong> {intellectual.FieldOfStudy}
               </p>
               <p>
                 <strong>Age:</strong> {calculateAge(intellectual.DOB)}
@@ -155,9 +246,11 @@ export default function IntellectualList() {
             </div>
           ))
         ) : (
-          <p>No intellectuals found.</p>
+          <p>No intellectuals found based on selected filters.</p>
         )}
       </div>
     </div>
   );
 }
+
+   
