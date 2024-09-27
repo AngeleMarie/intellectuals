@@ -1,4 +1,3 @@
-// model/IntellectualModel.js
 const mongoose = require('mongoose');
 
 const IntellectualSchema = new mongoose.Schema({
@@ -12,16 +11,18 @@ const IntellectualSchema = new mongoose.Schema({
   Residence: { type: String, required: true },
   DOB: { type: Date, required: true },
   SchoolName: { type: String },
-  Combination: { type: String },
-  FieldOfStudy: { type: String },
-  Degree: { type: String },
-  GraduationYear: { type: Date,required:true },
-  OtherField: { type: String },
-  Organization: { type: String,required:true },
-  Position: { type: String,required:true },
-  Location: { type: String,required:true },
-  MoreInformation :{type:String,required:true},
-  role: { type: String, enum: ['user', 'admin'], default: 'user' }, // Defaults to 'user'
+  Combination: { type: String },  
+  FieldOfStudy: [{ type: String }],
+  Degree: [{ type: String }], 
+  GraduationYear: { type: Date, required: true },
+    OtherField: { type: String },
+  Organization: { type: String, required: true },
+  Position: { type: String, required: true },
+  Location: { type: String, required: true },
+  MoreInformation: { type: String, required: true },
+  
+
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
 
 const Intellectual = mongoose.model('Intellectual', IntellectualSchema);

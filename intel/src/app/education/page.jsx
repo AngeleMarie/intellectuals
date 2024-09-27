@@ -10,8 +10,9 @@ export default function Education() {
     SchoolName: "",
     GraduationYear: "",
     Combination: "",
-    FieldOfStudy: "",
-    Degree: "Bachelors",
+    educationLevels: [
+      { FieldOfStudy: "", Degree: "Bachelors" }
+    ],
   });
 
   const [errors, setErrors] = useState({});
@@ -23,8 +24,17 @@ export default function Education() {
     }
   }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e, index = null) => {
+    const { name, value } = e.target;
+
+    if (index !== null) {
+      const updatedEducationLevels = formData.educationLevels.map((level, i) =>
+        i === index ? { ...level, [name]: value } : level
+      );
+      setFormData({ ...formData, educationLevels: updatedEducationLevels });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const validate = () => {
@@ -33,15 +43,21 @@ export default function Education() {
     if (formData.SchoolName.trim() === "") {
       newErrors.SchoolName = "School Name is required.";
     }
-    if (formData.GraduationYear.trim() === "" || new Date(formData.GraduationYear).getFullYear() > new Date().getFullYear()) {
+    if (
+      formData.GraduationYear.trim() === "" ||
+      new Date(formData.GraduationYear).getFullYear() > new Date().getFullYear()
+    ) {
       newErrors.GraduationYear = "Valid Graduation Year is required.";
     }
     if (formData.Combination.trim() === "") {
       newErrors.Combination = "Combination is required.";
     }
-    if (formData.FieldOfStudy.trim() === "") {
-      newErrors.FieldOfStudy = "Field of Study is required.";
-    }
+
+    formData.educationLevels.forEach((level, index) => {
+      if (level.FieldOfStudy.trim() === "") {
+        newErrors[`FieldOfStudy${index}`] = "Field of Study is required.";
+      }
+    });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -52,6 +68,16 @@ export default function Education() {
       localStorage.setItem("educationData", JSON.stringify(formData));
       router.push("/professional");
     }
+  };
+
+  const addMoreFields = () => {
+    setFormData((prev) => ({
+      ...prev,
+      educationLevels: [
+        ...prev.educationLevels,
+        { FieldOfStudy: "", Degree: "Bachelors" },
+      ],
+    }));
   };
 
   return (
@@ -101,36 +127,49 @@ export default function Education() {
               {errors.Combination && <p className="text-red-500">{errors.Combination}</p>}
             </div>
           </div>
+
           <div className="text-xl font-semibold mb-6 text-left">
             Other Education Levels
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 mb-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Field of Study</label>
-              <input
-                type="text"
-                name="FieldOfStudy"
-                value={formData.FieldOfStudy}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-              {errors.FieldOfStudy && <p className="text-red-500">{errors.FieldOfStudy}</p>}
+          {formData.educationLevels.map((level, index) => (
+            <div className="grid gap-6 md:grid-cols-2 mb-4" key={index}>
+              <div>
+                <label className="block text-sm font-medium mb-1">Field of Study</label>
+                <input
+                  type="text"
+                  name="FieldOfStudy"
+                  value={level.FieldOfStudy}
+                  onChange={(e) => handleChange(e, index)}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                />
+                {errors[`FieldOfStudy${index}`] && (
+                  <p className="text-red-500">{errors[`FieldOfStudy${index}`]}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Degree Obtained</label>
+                <select
+                  name="Degree"
+                  value={level.Degree}
+                  onChange={(e) => handleChange(e, index)}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                >
+                  <option value="Bachelors">Bachelors</option>
+                  <option value="Masters">Masters</option>
+                  <option value="PHD">PHD</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Degree Obtained</label>
-              <select
-                name="Degree"
-                value={formData.Degree}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-              >
-                <option value="Bachelors">Bachelors</option>
-                <option value="Masters">Masters</option>
-                <option value="PHD">PHD</option>
-              </select>
-            </div>
-          </div>
+          ))}
+
+          <button
+            type="button"
+            className="text-green-500 underline"
+            onClick={addMoreFields}
+          >
+            Add More Education
+          </button>
 
           <div className="flex justify-between py-4">
             <Link href="/" className="text-submain underline">

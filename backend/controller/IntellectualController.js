@@ -8,7 +8,6 @@ dotenv.config();
 
 const register = async (req, res) => {
   try {
-    
     const {
       FirstName,
       LastName,
@@ -21,23 +20,22 @@ const register = async (req, res) => {
       DOB,
       SchoolName,
       Combination,
-      FieldOfStudy,
-      Degree,
-      GraduationYear,
+      FieldOfStudy,  
+      Degree,        
+      GraduationYear, 
       OtherField,
       Position,
       Location,
       Organization,
       MoreInformation
-      
     } = req.body;
 
-    
     let user = await Intel.findOne({ Email: { $regex: new RegExp(`^${Email}$`, 'i') } });
     if (user) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
+  
     const intel = new Intel({
       FirstName,
       LastName,
@@ -50,9 +48,9 @@ const register = async (req, res) => {
       DOB,
       SchoolName,
       Combination,
-      FieldOfStudy,
-      Degree,
-      GraduationYear,
+      FieldOfStudy: Array.isArray(FieldOfStudy) ? FieldOfStudy : [FieldOfStudy],  
+      Degree: Array.isArray(Degree) ? Degree : [Degree],
+      GraduationYear: Array.isArray(GraduationYear) ? GraduationYear : [GraduationYear],
       OtherField,
       Organization,
       MoreInformation,
@@ -60,19 +58,18 @@ const register = async (req, res) => {
       Location,
     });
 
-    
     await intel.save();
     return res.status(201).json({ message: 'Intellectual registered successfully' });
   } catch (error) {
     console.error('Error registering intellectual:', error.message);
 
-    
     return res.status(500).json({
       error: 'Failed to register user',
       message: error.message, 
     });
   }
 };
+
 
 
 const loginAdmin = async (req, res) => {
