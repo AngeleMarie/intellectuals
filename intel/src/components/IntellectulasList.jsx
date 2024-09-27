@@ -11,7 +11,7 @@ export default function IntellectualList() {
   const [filters, setFilters] = useState({
     gender: "",
     country: "",
-    fieldOfStudy: ""
+    fieldOfStudy: "",
   });
   const router = useRouter();
 
@@ -30,7 +30,7 @@ export default function IntellectualList() {
       const queryParams = new URLSearchParams({
         Gender: filters.gender,
         Country: filters.country,
-        FieldOfStudy: filters.fieldOfStudy
+        FieldOfStudy: filters.fieldOfStudy,
       }).toString();
 
       const response = await fetch(
@@ -39,8 +39,8 @@ export default function IntellectualList() {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -68,7 +68,7 @@ export default function IntellectualList() {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -84,16 +84,18 @@ export default function IntellectualList() {
     const birthDate = new Date(birthdate);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
   };
 
   useEffect(() => {
-    
     fetchIntellectuals();
-  }, []); 
+  }, []);
 
   if (loading) {
     return <p>Loading intellectuals...</p>;
@@ -106,9 +108,7 @@ export default function IntellectualList() {
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
-    
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
           <div>
             <label htmlFor="gender" className="block font-medium">
               Gender:
@@ -126,27 +126,55 @@ export default function IntellectualList() {
             </select>
           </div>
 
-          
           <div>
             <label htmlFor="country" className="block font-medium">
               Country:
             </label>
             <select
-              id="country"
-              name="country"
-              value={filters.country}
+              id="residence"
+              name="residence"
+              value={filters.residence}
               onChange={handleFilterChange}
               className="border p-2 rounded w-full"
             >
               <option value="">All</option>
-              <option value="USA">USA</option>
-              <option value="Rwanda">Rwanda</option>
-              <option value="UK">UAE</option>
-          
+              <option value="Nyarugenge">Nyarugenge</option>
+              <option value="Gasabo">Gasabo</option>
+              <option value="Kicukiro">Kicukiro</option>
+
+              <option value="Nyagatare">Nyagatare</option>
+              <option value="Gatsibo">Gatsibo</option>
+              <option value="Kayonza">Kayonza</option>
+              <option value="Kirehe">Kirehe</option>
+              <option value="Ngoma">Ngoma</option>
+              <option value="Rwamagana">Rwamagana</option>
+              <option value="Bugesera">Bugesera</option>
+
+              <option value="Musanze">Musanze</option>
+              <option value="Rulindo">Rulindo</option>
+              <option value="Gakenke">Gakenke</option>
+              <option value="Gicumbi">Gicumbi</option>
+              <option value="Burera">Burera</option>
+
+              <option value="Kamonyi">Kamonyi</option>
+              <option value="Muhanga">Muhanga</option>
+              <option value="Ruhango">Ruhango</option>
+              <option value="Nyanza">Nyanza</option>
+              <option value="Huye">Huye</option>
+              <option value="Gisagara">Gisagara</option>
+              <option value="Nyaruguru">Nyaruguru</option>
+              <option value="Nyamagabe">Nyamagabe</option>
+
+              <option value="Karongi">Karongi</option>
+              <option value="Rusizi">Rusizi</option>
+              <option value="Ngororero">Ngororero</option>
+              <option value="Rubavu">Rubavu</option>
+              <option value="Nyamasheke">Nyamasheke</option>
+              <option value="Nyabihu">Nyabihu</option>
+              <option value="Rutsiro">Rutsiro</option>
             </select>
           </div>
 
-      
           <div>
             <label htmlFor="fieldOfStudy" className="block font-medium">
               Field of Study:
@@ -162,11 +190,9 @@ export default function IntellectualList() {
               <option value="Computer Science">Computer Science</option>
               <option value="Business analysis">Business analysis</option>
               <option value="Engineering">Engineering</option>
-            
             </select>
           </div>
 
-      
           <div className="flex items-center">
             <button
               onClick={handleFilterClick}
@@ -182,12 +208,16 @@ export default function IntellectualList() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {intellectuals.length > 0 ? (
           intellectuals.map((intellectual) => (
-            <div key={intellectual._id} className="bg-white shadow-md p-6 rounded-lg">
+            <div
+              key={intellectual._id}
+              className="bg-white shadow-md p-6 rounded-lg"
+            >
               <p className="text-main text-2xl py-2 font-bold">
                 <strong>General Information</strong>
               </p>
               <p>
-                <strong>Names:</strong> {intellectual.FirstName} {intellectual.LastName}
+                <strong>Names:</strong> {intellectual.FirstName}{" "}
+                {intellectual.LastName}
               </p>
               <p>
                 <strong>Email:</strong> {intellectual.Email}
@@ -208,40 +238,45 @@ export default function IntellectualList() {
                 <strong>Age:</strong> {calculateAge(intellectual.DOB)}
               </p>
               <p className="text-main text-2xl py-2 font-bold">
-                <strong>Educational Background</strong> 
+                <strong>Educational Background</strong>
               </p>
               <p>
-                <strong>High School:</strong> {intellectual.SchoolName || 'N/A'}
+                <strong>High School:</strong> {intellectual.SchoolName || "N/A"}
               </p>
               <p>
-                <strong>Combination:</strong> {intellectual.Combination || 'N/A'}
+                <strong>Combination:</strong>{" "}
+                {intellectual.Combination || "N/A"}
               </p>
               <p>
-                <strong>Field of Study:</strong> {intellectual.FieldOfStudy || 'N/A'}
+                <strong>Field of Study:</strong>{" "}
+                {intellectual.FieldOfStudy || "N/A"}
               </p>
               <p>
-                <strong>Degree:</strong> {intellectual.Degree || 'N/A'}
+                <strong>Degree:</strong> {intellectual.Degree || "N/A"}
               </p>
               <p>
-                <strong>Graduation Year:</strong> {new Date(intellectual.GraduationYear).getFullYear()}
+                <strong>Graduation Year:</strong>{" "}
+                {new Date(intellectual.GraduationYear).getFullYear()}
               </p>
               <p className="text-main text-2xl py-2 font-bold">
-                <strong>Current Career</strong> 
+                <strong>Current Career</strong>
               </p>
               <p>
-                <strong>Organization:</strong> {intellectual.Organization || 'N/A'}
+                <strong>Organization:</strong>{" "}
+                {intellectual.Organization || "N/A"}
               </p>
               <p>
-                <strong>Position:</strong> {intellectual.Position || 'N/A'}
+                <strong>Position:</strong> {intellectual.Position || "N/A"}
               </p>
               <p>
-                <strong>Location:</strong> {intellectual.Location || 'N/A'}
+                <strong>Location:</strong> {intellectual.Location || "N/A"}
               </p>
               <p>
-                <strong>Role:</strong> {intellectual.Role || 'N/A'}
+                <strong>Role:</strong> {intellectual.Role || "N/A"}
               </p>
               <p>
-                <strong>Short Description:</strong> {intellectual.MoreInformation || 'N/A'}
+                <strong>Short Description:</strong>{" "}
+                {intellectual.MoreInformation || "N/A"}
               </p>
             </div>
           ))
@@ -252,5 +287,3 @@ export default function IntellectualList() {
     </div>
   );
 }
-
-   
