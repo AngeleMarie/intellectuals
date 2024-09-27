@@ -62,7 +62,8 @@ export default function Home() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleContinue = () => {
+  const handleContinue = (e) => {
+    e.preventDefault();
     if (validate()) {
       localStorage.setItem('personalData', JSON.stringify(formData));
       router.push('/education');
@@ -70,7 +71,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-green-100">
+    <main className="min-h-screen ">
       <Navbar />
       <div className="max-w-4xl mx-auto py-10 px-5">
         <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>

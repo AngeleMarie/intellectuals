@@ -61,6 +61,8 @@ export default function Professional() {
     if (validate()) {
       try {
         const response = await fetch("https://intellectuals.vercel.app/register", {
+        
+
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -77,7 +79,7 @@ export default function Professional() {
   };
 
   return (
-    <main className="min-h-screen bg-green-100 p-4">
+    <main className="min-h-screen  p-4">
       <Navbar />
       <div className="max-w-4xl mx-auto py-10 px-5">
         <form className="space-y-6" onSubmit={handleSubmit}>

@@ -20,14 +20,13 @@ const register = async (req, res) => {
       DOB,
       SchoolName,
       Combination,
-      FieldOfStudy,  
-      Degree,        
-      GraduationYear, 
+      educationLevels,  // This includes FieldOfStudy and Degree as array of objects
       OtherField,
+      Organization,
+      GraduationYear,
       Position,
       Location,
-      Organization,
-      MoreInformation
+      MoreInformation,
     } = req.body;
 
     let user = await Intel.findOne({ Email: { $regex: new RegExp(`^${Email}$`, 'i') } });
@@ -35,7 +34,10 @@ const register = async (req, res) => {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-  
+    
+    const FieldOfStudy = educationLevels.map(level => level.FieldOfStudy);
+    const Degree = educationLevels.map(level => level.Degree);
+
     const intel = new Intel({
       FirstName,
       LastName,
@@ -48,11 +50,11 @@ const register = async (req, res) => {
       DOB,
       SchoolName,
       Combination,
-      FieldOfStudy: Array.isArray(FieldOfStudy) ? FieldOfStudy : [FieldOfStudy],  
-      Degree: Array.isArray(Degree) ? Degree : [Degree],
-      GraduationYear: Array.isArray(GraduationYear) ? GraduationYear : [GraduationYear],
+      FieldOfStudy,  // Save array of FieldOfStudy
+      Degree,        // Save array of Degree
       OtherField,
       Organization,
+      GraduationYear,
       MoreInformation,
       Position,
       Location,
@@ -69,6 +71,7 @@ const register = async (req, res) => {
     });
   }
 };
+
 
 
 

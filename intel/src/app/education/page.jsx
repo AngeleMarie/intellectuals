@@ -81,7 +81,7 @@ export default function Education() {
   };
 
   return (
-    <main className="relative min-h-screen bg-green-100">
+    <main className="relative min-h-screen ">
       <Navbar />
       <div className="max-w-4xl mx-auto py-10 px-5">
         <form className="space-y-12" onSubmit={(e) => e.preventDefault()}>

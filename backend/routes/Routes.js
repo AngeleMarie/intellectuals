@@ -7,6 +7,6 @@ const adminMiddleware = require('../middlewares/auth');
 router.post('/register', register);
 router.post('/admin/login', loginAdmin);
 router.post('/admin/register', registerAdmin);
-router.get('/intellectuals/filter',adminMiddleware, filterIntellectuals);
+router.get('/intellectuals/filter', adminMiddleware,filterIntellectuals);
 
 module.exports = router;

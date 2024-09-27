@@ -13,6 +13,15 @@ export default function IntellectualList() {
     residence: "",
     fieldOfStudy: "",
   });
+
+  const districts = [
+    "Nyarugenge", "Gasabo", "Kicukiro", // Kigali City
+    "Rwamagana", "Kayonza", "Kirehe", "Ngoma", "Bugesera", "Gatsibo", "Nyagatare", // Eastern Province
+    "Karongi", "Ngororero", "Nyabihu", "Nyamasheke", "Rubavu", "Rusizi", "Rutsiro", // Western Province
+    "Musanze", "Gakenke", "Gicumbi", "Burera", "Rulindo", // Northern Province
+    "Nyanza", "Gisagara", "Nyaruguru", "Huye", "Ruhango", "Muhanga", "Kamonyi" // Southern Province
+  ];
+
   const router = useRouter();
 
   const fetchIntellectuals = async () => {
@@ -32,8 +41,8 @@ export default function IntellectualList() {
       }).toString();
 
       const response = await fetch(
-        `https://intellectuals.vercel.app/intellectuals/filter?${queryParams}`,
-        {
+        
+      `https://intellectuals.vercel.app/intellectuals/filter?${queryParams}`,  {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -129,12 +138,15 @@ export default function IntellectualList() {
             </label>
             <select
               id="residence"
-              name="residence"
+              name="residence" 
               value={filters.residence}
               onChange={handleFilterChange}
               className="border p-2 rounded w-full"
             >
-              {/* Add residence options */}
+              <option value="">All</option>
+              {districts.map((district, index) => (
+                <option key={index} value={district}>{district}</option>
+              ))}
             </select>
           </div>
 
@@ -149,7 +161,11 @@ export default function IntellectualList() {
               onChange={handleFilterChange}
               className="border p-2 rounded w-full"
             >
-              {/* Add field of study options */}
+              <option value="">All</option>
+              <option value="it">IT</option>
+              <option value="architecture">Architecture</option>
+
+              
             </select>
           </div>
 
@@ -172,44 +188,28 @@ export default function IntellectualList() {
               key={intellectual._id}
               className="bg-white shadow-md p-6 rounded-lg"
             >
-              {/* General Information */}
               <p className="text-main text-2xl py-2 font-bold">
                 <strong>General Information</strong>
               </p>
               <p>
-                <strong>Names:</strong> {intellectual.FirstName}{" "}
-                {intellectual.LastName}
+                <strong>Names:</strong> {intellectual.FirstName} {intellectual.LastName}
               </p>
               <p>
                 <strong>Email:</strong> {intellectual.Email}
               </p>
               <p>
-                <strong>Phone Number:</strong> {intellectual.PhoneNumber}
+                <strong>Phone Number:</strong> +{intellectual.PhoneNumber}
               </p>
               <p>
                 <strong>Gender:</strong> {intellectual.Gender}
               </p>
               <p>
-                <strong>Residence:</strong> {intellectual.Residence},{" "}
-                {intellectual.Country}
-              </p>
-              <p>
-                <strong>Field of Study:</strong>
-                {intellectual.FieldOfStudy?.length > 0 ? (
-                  <ul>
-                    {intellectual.FieldOfStudy.map((field, index) => (
-                      <li key={index}>{field}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
+                <strong>Residence:</strong> {intellectual.Residence}, {intellectual.Country}
               </p>
               <p>
                 <strong>Age:</strong> {calculateAge(intellectual.DOB)}
               </p>
 
-              {/* Educational Background */}
               <p className="text-main text-2xl py-2 font-bold">
                 <strong>Educational Background</strong>
               </p>
@@ -217,65 +217,56 @@ export default function IntellectualList() {
                 <strong>High School:</strong> {intellectual.SchoolName || "N/A"}
               </p>
               <p>
-                <strong>Combination:</strong>{" "}
-                {intellectual.Combination || "N/A"}
-              </p>
-              <p>
-                <strong>Degree:</strong>
-                {intellectual.Degree?.length > 0 ? (
-                  <ul>
-                    {intellectual.Degree.map((degree, index) => (
-                      <li key={index}>{degree}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
+                <strong>Combination:</strong> {intellectual.Combination || "N/A"}
               </p>
               <p>
                 <strong>Graduation Year:</strong>
-                {intellectual.GraduationYear}
+                {new Date(intellectual.GraduationYear).getFullYear()}
               </p>
 
-              {/* Work Experience */}
+              <div className="flex gap-x-4">
+                <div>
+                  <p>
+                    <strong>Field of Study:</strong>
+                  </p>
+                  {intellectual.FieldOfStudy?.length > 0 ? (
+                    <ul className="list-disc pl-4">
+                      {intellectual.FieldOfStudy.map((field, index) => (
+                        <li key={index}>{field}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>N/A</p>
+                  )}
+                </div>
+
+                <div>
+                  <p>
+                    <strong>Degree:</strong>
+                  </p>
+                  {intellectual.Degree?.length > 0 ? (
+                    <ul className="list-disc pl-4">
+                      {intellectual.Degree.map((degree, index) => (
+                        <li key={index}>{degree}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>N/A</p>
+                  )}
+                </div>
+              </div>
+
               <p className="text-main text-2xl py-2 font-bold">
                 <strong>Work Experience</strong>
               </p>
               <p>
-                <strong>Organization:</strong>
-                {intellectual.Organization?.length > 0 ? (
-                  <ul>
-                    {intellectual.Organization.map((org, index) => (
-                      <li key={index}>{org}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
+                <strong>Organization:</strong> {intellectual.Organization}
               </p>
               <p>
-                <strong>Position:</strong>
-                {intellectual.Position?.length > 0 ? (
-                  <ul>
-                    {intellectual.Position.map((pos, index) => (
-                      <li key={index}>{pos}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
+                <strong>Position:</strong> {intellectual.Position}
               </p>
               <p>
-                <strong>Location:</strong>
-                {intellectual.Location?.length > 0 ? (
-                  <ul>
-                    {intellectual.Location.map((loc, index) => (
-                      <li key={index}>{loc}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
+                <strong>Location:</strong> {intellectual.Location}
               </p>
             </div>
           ))

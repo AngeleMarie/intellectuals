@@ -11,7 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configure CORS
 const corsOptions = {
-  origin: 'https://intellectuals-tjmo.vercel.app',
+  // origin: 'https://intellectuals-tjmo.vercel.app',
+  origin: 'http://localhost:3000',
    methods: 'GET,POST,PUT,DELETE',
   allowedHeaders: 'Content-Type,Authorization', 
 };
