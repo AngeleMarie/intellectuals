@@ -131,13 +131,13 @@ const registerAdmin = async (req, res) => {
 const filterIntellectuals = async (req, res) => {
   try {
   
-    const { Gender, Degree, FieldOfStudy, Country } = req.query;
+    const { Gender, Degree, FieldOfStudy, Residence } = req.query;
 
     let query = {};
 
 
-    if (Country) {
-      query.Country = Country;
+    if (Residence) {
+      query.Residence= Residence;
     }
     if (Degree) {
       query.Degree = Degree;
