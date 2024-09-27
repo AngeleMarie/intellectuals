@@ -170,7 +170,7 @@ export default function Home() {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Residential address</label>
+              <label className="block text-gray-700">Residential District</label>
               <input
                 type="text"
                 name="Residence"
