@@ -128,7 +128,7 @@ export default function IntellectualList() {
 
           <div>
             <label htmlFor="country" className="block font-medium">
-              Country:
+              Residence:
             </label>
             <select
               id="residence"
@@ -229,8 +229,16 @@ export default function IntellectualList() {
                 <strong>Gender:</strong> {intellectual.Gender}
               </p>
               <p>
-                <strong>Country:</strong> {intellectual.Country}
+                <strong>Residence:</strong> 
+                <span>
+                {intellectual.Residence}
+                  </span>
+                  <span>,</span>
+                  <span>
+                    {intellectual.Country}
+                    </span>
               </p>
+              
               <p>
                 <strong>Field of Study:</strong> {intellectual.FieldOfStudy}
               </p>
